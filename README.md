@@ -19,7 +19,7 @@ Pada winbox mikrotik, buka System → identity. Set Identity sesuai yang kamu in
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/71d6794b-5ad3-4c8a-8d54-e68052352397)
 
 
-A. Konfigurasi IP Address, NTP dan NAT Masquerade pada Router
+## A. Konfigurasi IP Address, NTP dan NAT Masquerade pada Router
 Kita mulai dengan request dhcp client pada ether1.
 Buka menu IP → DHCP Client, tambah baru dengan klik icon "+". Pilih interfacenya ether1.
 
@@ -81,7 +81,7 @@ Buka menu System → Clock. Setting Timezone-nya sesuai daerah masing-masing. Co
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/2f144148-71d2-4f82-9f91-526fde84cea0)
 
 
-B. Konfigurasi Web Proxy
+## B. Konfigurasi Web Proxy
 Setelah itu itu kita juga perlu mengaktifkan web proxy. Caranya buka menu IP → Web Proxy. Checklist opsi Enabled.
 Port biarkan default 8080, checklist juga pada Anonymous, supaya bisa digunakan tanpa login. Cache administratornya ubah menjadi nama@sekolah.sch.id (i.e. webiptek@sekolah.sch.id).
 
@@ -90,7 +90,7 @@ Untuk web proxy, kita akan mengujinya di akhir, setelah semua konfigurasi soal i
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/331ec021-3d77-4e2c-8587-351fa206fdbc)
 
 
-C. Konfigurasi DHCP Server untuk LAN dan WLAN
+## C. Konfigurasi DHCP Server untuk LAN dan WLAN
 Berikutnya kita konfigurasi DHCP untuk ether2 (LAN) dan ether3 (WLAN). Keduanya ip poolnya diset untuk 99 client. Jadi ip pool pada ether2 kita gunakan 192.168.100.2-192.168.100.100 sedangkan pada ether3 kita gunakan 192.168.200.2-192.168.200.100.
 Buka menu IP → DHCP Server, klik DHCP Setup. Kita mulai dari ether2. Biarkan parameternta default, kecuali pada Address to Giveout sesuaikan dengan ip pool di atas.
 
@@ -119,7 +119,7 @@ Kita bisa lakukan pengujian pada komputer client yang terhubung dengan kabel (ja
 
 Untuk client wireless akan kita uji nanti setelah konfigurasi wireless dan hotspot.
 
-D. Konfigurasi Hotspot pada Router (ether3)
+## D. Konfigurasi Hotspot pada Router (ether3)
 Jaringan LAN sudah tersambung, sekarang kita konfigurasi untuk jaringan wireless-nya. Pertama, kita buat hotspot server pada router untuk ether3. Hotspot di mikrotik nantinya berfungsi sebagai captive portal atau autentifikasi login user-password. Jadi setelah kita terhubung ke wifi, kita harus masuk atau autentifikasi lagi dengan user acccount. User account ini biasanya digunakan menentukan role atau profil kita. Gunanya role ini nanti bisa menentukan banyak hal, misalnya antara akun guru dan siswa bisa memiliki kecepatan akses, batas waktu koneksi, batas kuota yang berbeda-beda. Dan lainnya sesuai yang kita konfigurasi di mikrotik. Kita akan lihat penerapannya pada bagian Konfigurasi RADIUS untuk Hotspot
 
 .
@@ -136,7 +136,7 @@ Sekarang kita sudah punya hotspot server untuk ether3 yang nanti akan diteruskan
 
 
 
-E. Opsi 1: Konfigurasi Access Point Mikrotik RouterOS
+## E. Opsi 1: Konfigurasi Access Point Mikrotik RouterOS
 Mikrotik ini adalah perangkat yang fiturnya cukup lengkap. Meksipun router, mikrotik juga bisa dijadikan repeater jaringan kabel ke wireless atau dijadikan access point.
 
 Saya asumsikan ether1 mkrotik access point ini terhubung ke ether3 router. Dan nanti kita gunakan wlan1 untuk access pointnnya.
@@ -169,7 +169,7 @@ Kemudian kita setting modenya menjadi ap_bridge. SSID-nya bebas karena tidak ada
 Jika semua sudah di konfigurasi pada Mikrotik Access Point. Sekarang bisa kita lakukan pengujian di sisi wireless client, bisa menggunakan Laptop atau Gawai (Smartphone).
 
 
-F. Opsi 2: Konfigurasi Access Point TPLink
+## F. Opsi 2: Konfigurasi Access Point TPLink
 Opsi kedua selain menggunakan mikrotik, kita menggunakan Access Point yang konvensional, merk apapun. Di sini kita contohkan menggunakan TP Link TL-WA801ND. Untuk versi atau vendor/merk lain mungkah langkahnya sedikit berbeda tapi inti dari settingannya sama. Yaitu kita jadikan access point ini sebagai mode Access Point, hehe. Dan juga setting wifi (SSID dan password).
 
 Cara Reset Access Point: biasanya cukup tekan dan tahan tombol reset dibagian belakang. Kemudian tunggu sampai semua LED di bagian depan nyala bersamaan semua. Setelah semua padam kembali, lepas tekanan di tombol reset.
@@ -230,7 +230,7 @@ Jika berhasil masuk, cek juga koneksi internetnya, harusnya bisa.
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/3965deb5-96ef-471d-a250-5a573fe01323)
 
-G. Konfigurasi Firewall
+## G. Konfigurasi Firewall
 
 Block ping dari IP 192.168.100.2-192.168.100.50 ke router
 
@@ -328,7 +328,7 @@ Cara konfigurasi proxy, buka google chrome. KLik icon titik 3 di pojok kanan ata
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/06c7a117-78fe-4f8d-a825-bf21b1660bbe)
 
-G. Management Bandwidth
+## G. Management Bandwidth
 Terakhir kita diminata memanage bandwidth untuk traffic dari jaringan LAN, bandwidthnya adalah 256Kbps. Sedangkan untuk jaringan WLAN hanya 128Kbps. Kita gunakan saja Simple Queue mikrotik,
 
 Buka menu Queues, pilih tab Simple Queues tambah rule baru, namenya bebas. Targetnya kita isi dengan alamat network jaringan LAN (10.10.0.128/26) atau dengan interface yang mengarah ke jaringan LAN yaitu ether3.
