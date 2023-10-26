@@ -128,117 +128,8 @@ Biarkan semua parameternya default, kecuali bagian dns name, isi dengan nama dom
 Sekarang kita sudah punya hotspot server untuk ether3 yang nanti akan diteruskan oleh Access Point.
 
 
-E. Konfigurasi RADIUS Userman pada Router
-Menurut wikipedia, RADIUS merupakan kependekan dari Remote Authentication Dial-In User Service adalah sebuah protokol keamanan komputer yang digunakan untuk melakukan autentikasi, otorisasi, dan pendaftaran akun pengguna secara terpusat untuk mengakses jaringan. Hehe.
 
-Seperti yang saya katakan di bagian konfigurasi hotspot. Fitur hotspot mikrotik memungkinkan pengguna melakukan autentifikasi berupa user account untuk terhubung ke jaringan. Hotspot mikrotik sendiri ada management usernya, teman-teman bisa melihatnya di Soal Paket 2, di situ kita mengkonfigurasi user hotspot menggunakan fitur hotspot mikrotik. Jadi data akun user disimpan di mikrotik. Sementara itu dengan RADIUS kita menggunakan server khusus untuk menyimpan data user account tersebut.
-
-
-Meskipun di lab ini, kita tidak akan menggunakan server luar. Kita akan menjadikan router mikrotik kita sebagai server RADIUS dengan package user-manager. Jadi nanti datanya tetap di simpan di mikrotik tapi dimanage oleh package user-manager bukan oleh package hotspot mikrotik seperti yang di soal paket 2. Tapi kegunaanya sama. Di userman kita juga mensetting parameter seperti limit kecepatan, masa aktif user, dsb.
-
-Installasi User-Manager di Mikrotik
-
-User-manager merupakan paket tambahan yang biasanya terpisah dari paket utama mikrotik (artinya: belum diinstall). Jadi, kita cek dulu apakah userman (begitu biasa user-manager disingkat) sudah terinstall. Caranya buka menu System → Pacakages.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/173456f8-3a62-45c6-9a6a-d40ed6189d54)
-
-
-Jika disitu tidak ada pacakage "user-manager", berarti belum diinstall dan kita harus menginstallnya.
-Note: Tidak semua mikrotik support userman, karena untuk menginstall package tambahan perlu space pada memori penyimpanan. Mikrotik yang storage-nya hanya 16MB biasa tidak support.
-
-Sebelum menginstall, kita perlu tahu apa type mikrotik kita dan versi berapa. Caranya cukup lihat top bar winbox. Di situ ada keterangan type dan versi mikrotik kita.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/7f26eaf9-31d0-4036-90f3-85e6aa8e9073)
-
-Jika sudah tahu type dan versi perangkat mikrotik kita. Sekarang kita download package user-manager di https://mikrotik.com/download. Pilih yangg extra package.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/60e35737-8b88-4c78-9a4f-6c12cbbafa7f)
-
-
-Jika sudah didownload, ekstrack filenya cari file "user-manager-xxx.npk" (xxx adalah versi routeros). Upload file tersebut ke mikrotik menggunakan FTP. Untuk windows bisa split screen winbox dan windows explorer kemudian drag and drop filenya ke winbox mikrotik, menu Files. Seperti gambar ini.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/fd560535-5af4-44fa-9fe5-fe44e6494cf4)
-
-
-Setelah itu reboot mikrotik untuk menginstall packagenya. Pilih System → Reboot.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/cb9f4139-0e9e-494a-bb21-414b9b30c764)
-
-
-Akses mikrotik kembali setelah selesai reboot. Cek di System → Packages. Pastikan sekarang sudah terinstall package "user-manager".
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/4b5fc0b4-82d6-4d8d-8ab6-95d20d48b063)
-
-
-Konfigurasi RADIUS untuk Hotspot Mikrotik
-
-Buka menu RADIUS, tambah baru dengan klik icon "+". Di tab general. Pada bagian service, checklist hotspot.
-Pada bagian Address isi dengan alamat ip server RADIUS. Karena kita menggunakan RADIUS di server lokal, maka ip addressnya kita dengan ip localhost, 127.0.0.1.
-Untuk Secret, anggap saja itu adalah password untuk berinteraksi dengan server RADIUS. Jadi isi selayaknya password, contoh: ukk2020. Secret ini harus sama antara yang kita konfigurasi di mikrotik dan di server RADIUS (userman) nanti. Jadi catat baik-baik ya.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/18042c2b-ef88-4434-9ba5-fc7a2b4af69b)
-
-
-Masih di menu RADIUS, klik tombol Incoming. Checklist opsi Accept.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/c2c7f722-39f7-499d-bb04-706095c7da39)
-
-
-Kemudian pada menu IP → Hotspot → Server Profiles. Edit (double-click) user profile yang kita gunakan, pilih tab RADIUS, checklist User RADIUS.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/9f548322-e734-4d9e-a25f-67f861485d3b)
-
-
-Konfigurasi pada Server RADIUS
-
-Buka ip mikrotik melalui web browser. Di sini saya menggunakan client jaringan LAN untuk mengaksesnya sehingga ip yang saya gunakan http://192.168.100.1/userman. Login ke userman dengan default login: admin tanpa password.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/d4e60de5-635e-409e-988f-8225484026c5)
-
-
-Tambahkan router client RADIUS. Caranya buka menu Router, klik Add New. Isi
-Name: bebas (i.e. Router)
-IP Address: alamat ip router (yaitu 172.0.0.1)
-Shared Secret: isi sama dengan secret yang dikonfigurasi di mikrotik. (i.e. ukk2020).
-Kemudian klik Add.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/8738d098-5047-4981-b969-b2dab7e1503a)
-
-
-Membuat user di RADIUS (Userman)
-
-Sebelum membuat user, kita buat profil terlebih dahulu. Profile inilah yang menentukan ketentuan atau role suatu user. Misalnya limit bandwidth, waktu akses internet, dll. Buka menu Profiles. Pilih tab Profiles, tambah baru dengan klik icon "+". Isi namanya terserah (i.e. profile1). Kemudian klik Create.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/30ee3b56-315f-46a1-b1c1-91fd49e6d5a0)
-
-Masih di menu yang sama (Profiles), sekarang pilih tab Limitation. Klik Add New. Isi name: bebas (i.e. limit1). Kemudian klik Add.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/5c6dc9bf-ee79-46af-92ac-75ceef126d6d)
-
-Kembali ke tab Profiles. Tambahkan limitasi untuk profile1. Klik Add new limitation, pada bagian time kita atur waktu akses internetnya sesuai ketentuan soal yaitu dari pukul 07.00 sampai 16.00. Dan checklist pada limitasi yang tadi kita buat (i.e. limit1). Kemudian klik Add.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/b71fb18d-40f2-4121-b427-7792d0cb3dc3)
-
-Save profile.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/44fc3cf1-4307-46ff-89e7-0a3c8b05159f)
-
-Sekarang kita buat 20 user dengan profile profile1. Buka menu Users, klik Add → Batch.
-Number of user: isi dengan jumlah user yang akan dibuat yaitu 20.
-Username prefix: isi nama awalan user (i.e. ukk).
-Username lenght: menentukan panjang username (setelah prefix).
-Password lenght: menentukan panjang password. Jangan lupa Assign profile ke profile1. Klik Add.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/535beb57-613f-45e3-8bca-de3fbaaeca25)
-
-Maka akan ada 20 user baru, kita bisa gunakan user ini untuk login hotspot nanti. Double-click pada user tertentu untuk melihat passwordnya.
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/5811b6ee-3a53-49db-b108-1fe4e1e16a6f)
-
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/d65712a7-de8c-4e11-a32a-fdf65cb1a3ad)
-
-
-F. Opsi 1: Konfigurasi Access Point Mikrotik RouterOS
+E. Opsi 1: Konfigurasi Access Point Mikrotik RouterOS
 Mikrotik ini adalah perangkat yang fiturnya cukup lengkap. Meksipun router, mikrotik juga bisa dijadikan repeater jaringan kabel ke wireless atau dijadikan access point.
 
 Saya asumsikan ether1 mkrotik access point ini terhubung ke ether3 router. Dan nanti kita gunakan wlan1 untuk access pointnnya.
@@ -271,7 +162,7 @@ Kemudian kita setting modenya menjadi ap_bridge. SSID-nya bebas karena tidak ada
 Jika semua sudah di konfigurasi pada Mikrotik Access Point. Sekarang bisa kita lakukan pengujian di sisi wireless client, bisa menggunakan Laptop atau Gawai (Smartphone).
 
 
-G. Opsi 2: Konfigurasi Access Point TPLink
+F. Opsi 2: Konfigurasi Access Point TPLink
 Opsi kedua selain menggunakan mikrotik, kita menggunakan Access Point yang konvensional, merk apapun. Di sini kita contohkan menggunakan TP Link TL-WA801ND. Untuk versi atau vendor/merk lain mungkah langkahnya sedikit berbeda tapi inti dari settingannya sama. Yaitu kita jadikan access point ini sebagai mode Access Point, hehe. Dan juga setting wifi (SSID dan password).
 
 Cara Reset Access Point: biasanya cukup tekan dan tahan tombol reset dibagian belakang. Kemudian tunggu sampai semua LED di bagian depan nyala bersamaan semua. Setelah semua padam kembali, lepas tekanan di tombol reset.
@@ -332,10 +223,11 @@ Jika berhasil masuk, cek juga koneksi internetnya, harusnya bisa.
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/3965deb5-96ef-471d-a250-5a573fe01323)
 
-Konfigurasi Firewall
+G. Konfigurasi Firewall
+
 Block ping dari IP 192.168.100.2-192.168.100.50 ke router
 
-Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
+1 Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
 Chain = input
 Src. Address = 192.168.100.2-192.168.100.50
 Protocol = icmp
@@ -343,12 +235,13 @@ Action = Drop
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/f4a3015c-52ba-4f73-82ce-4078582dd53c)
 
-Cara mengujinya buka client LAN, pastikan IP Addressnya ada di range 192.168.100.2-192.168.100.50, jika belum ubahlah menjadi IP di range tersebut secara statis (i.e. 192,168.100.10). Lalu ping ke client wireless (i.e. 192.168.200.99). Harusnya berhasil. Tetapi jika ping ke router (192.168.100.1) gagal, request timeout.
+2. Cara mengujinya buka client LAN, pastikan IP Addressnya ada di range 192.168.100.2-192.168.100.50, jika belum ubahlah menjadi IP di range tersebut secara statis (i.e. 192,168.100.10). Lalu ping ke client wireless (i.e. 192.168.200.99). Harusnya berhasil. Tetapi jika ping ke router (192.168.100.1) gagal, request timeout.
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/bf9ff75d-23eb-4c16-a923-9104c88bcc78)
 
 Block ping dari IP 192.168.100.51-192.168.100.100 ke Jaringan WLAN
-Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
+
+1. Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
 Chain = forward
 Src. Address = 192.168.100.51-192.168.100.100
 Dst. Address = 192.168.200.0/24
@@ -357,13 +250,13 @@ Action = Drop
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/f029f33f-8e61-4f2c-8d11-fdddeaa07215)
 
-Cara mengujinya buka client LAN, pastikan IP Addressnya ada di range 192.168.100.51-192.168.100.100, jika IP DHCP belum ada di range tersebut ubahlah menjadi IP di range tersebut secara statis (i.e. 192,168.100.100). Lalu ping ke client wireless (i.e. 192.168.200.99). Harusnya timeout. Tetapi jika ping ke router (192.168.100.1) berhasil.
+2. Cara mengujinya buka client LAN, pastikan IP Addressnya ada di range 192.168.100.51-192.168.100.100, jika IP DHCP belum ada di range tersebut ubahlah menjadi IP di range tersebut secara statis (i.e. 192,168.100.100). Lalu ping ke client wireless (i.e. 192.168.200.99). Harusnya timeout. Tetapi jika ping ke router (192.168.100.1) berhasil.
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/1c6ba972-d4d3-438e-8c07-7d6a76440466)
 
 Setiap Akses ke Router tercatat di Logging dan tersimpan di disk.
 
-Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
+1. Buka menu IP → Firewall, pilih tab Firewall Filter. Tambah baru,
 Chain = input
 Action = log
 Log = yes (checklist)
@@ -371,18 +264,18 @@ Log-prefix = akses-ke-router- (checklist)
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/dc604dc4-49a8-4629-b8c7-5c2cdba955d7)
 
-Buka menu System → Logging, tambah rule baru. Isi prefix sesuai yang kita konfigurasi pada firewall. Pilih disk pada opsi Action.
+2. Buka menu System → Logging, tambah rule baru. Isi prefix sesuai yang kita konfigurasi pada firewall. Pilih disk pada opsi Action.
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/0163acd7-28f1-4d64-b1dc-a994fc135c99)
 
-Cara mengujinya cek menu Log, sekarang setiap ada traffic masuk akan dicatat di dalam log dengan prefix "akses-ke-router-" dan disimpan di disk.
+3. Cara mengujinya cek menu Log, sekarang setiap ada traffic masuk akan dicatat di dalam log dengan prefix "akses-ke-router-" dan disimpan di disk.
 
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/14f7381d-9db3-42e7-b322-b39a9fd82096)
 
 Block Situs linux.org dan File .mp3 .mpk
 
-Buka menu IP → Firewall, pili Filter Rules. Tambah baru.
+1. Buka menu IP → Firewall, pili Filter Rules. Tambah baru.
 chain = forward
 content = linux.org
 action = drop
@@ -390,7 +283,7 @@ action = drop
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/e9c47308-db7a-4baa-ba96-72fd6c8d94d7)
 
-Cara yang sama kita gunakan untuk memblokir file .mp3. Hanya perlu diubah content-nya.
+2. Cara yang sama kita gunakan untuk memblokir file .mp3. Hanya perlu diubah content-nya.
 chain = forward
 content = .mp3
 action = drop
@@ -428,7 +321,7 @@ Cara konfigurasi proxy, buka google chrome. KLik icon titik 3 di pojok kanan ata
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/06c7a117-78fe-4f8d-a825-bf21b1660bbe)
 
-Management Bandwidth
+G. Management Bandwidth
 Terakhir kita diminata memanage bandwidth untuk traffic dari jaringan LAN, bandwidthnya adalah 256Kbps. Sedangkan untuk jaringan WLAN hanya 128Kbps. Kita gunakan saja Simple Queue mikrotik,
 
 Buka menu Queues, pilih tab Simple Queues tambah rule baru, namenya bebas. Targetnya kita isi dengan alamat network jaringan LAN (10.10.0.128/26) atau dengan interface yang mengarah ke jaringan LAN yaitu ether3.
