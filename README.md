@@ -4,7 +4,9 @@ Ini adalah page untuk belajar konfigurasi dasar dan pengujian
 Sesuai dengaan Capaiann Belajar Fase E
 Peserta didik mampu memasang perangkat jaringan ke dalam sistem jaringan, mengganti perangkat jaringan sesuai dengan
 kebutuhan, menjelaskan konsep VLAN, mengkonfigurasi dan menguji VLAN, memahami proses routing dan jenis-jenis routing, 
-mengkonfigurasi, menganalisis permasalahan dan memperbaiki konfigurasi routing statis dan routing dinamis,
+mengkonfigurasi, menganalisis permasalahan dan memperbaiki konfigurasi routing statis dan routing dinamis, mengkonfigurasi NAT, 
+menganalisis permasalahan internet gateway dan memperbaiki konfigurasi NAT, mengkonfigurasi, menganalisis permasalahan dan 
+memperbaiki konfigurasi proxy server, manajemen bandwidth dan load balancing
 
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/95690bcf-85a5-4bbd-a811-cdadd6726d4a)
