@@ -9,6 +9,10 @@ menganalisis permasalahan internet gateway dan memperbaiki konfigurasi NAT, meng
 memperbaiki konfigurasi proxy server, manajemen bandwidth dan load balancing
 
 
+
+
+
+
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/95690bcf-85a5-4bbd-a811-cdadd6726d4a)
 
 Pada Router kita diminta mengkonfigurasi NTP, Web Proxy, Hotspot dengan RADIUS, DHCP Server, dan firewall. Untuk server RADIUS, kita akan menggunakan userman yang terinstal pada Router. Sedangkan untuk mengkonfigurasi mikrotik kita akan mengguanakan software winbox yang bisa didownload melalui Website MikroTik.
