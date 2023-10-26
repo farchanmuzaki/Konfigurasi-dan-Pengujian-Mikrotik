@@ -1,6 +1,7 @@
 # Konfigurasi-dan-Pengujian-Mikrotik
 
 # Sesuai dengaan Capaiann Belajar Fase E
+
 Peserta didik mampu memasang perangkat jaringan ke dalam sistem jaringan, mengganti perangkat jaringan sesuai dengan
 kebutuhan, menjelaskan konsep VLAN, mengkonfigurasi dan menguji VLAN, memahami proses routing dan jenis-jenis routing, 
 mengkonfigurasi, menganalisis permasalahan dan memperbaiki konfigurasi routing statis dan routing dinamis, mengkonfigurasi NAT, 
@@ -11,7 +12,7 @@ memperbaiki konfigurasi proxy server, manajemen bandwidth dan load balancing
 
 Pada Router kita diminta mengkonfigurasi NTP, Web Proxy, Hotspot dengan RADIUS, DHCP Server, dan firewall. Untuk server RADIUS, kita akan menggunakan userman yang terinstal pada Router. Sedangkan untuk mengkonfigurasi mikrotik kita akan mengguanakan software winbox yang bisa didownload melalui Website MikroTik.
 
-
+## Konfigurasi Awal
 Seperti biasa, pastikan mikrotik telah direset ke no default konfiguration. Selain itu agar kita tidak bingung mana mikrotik yang dijadikan router, mana yang dijadikan accesspoint (jika menggunakan mikrotik). Maka, kita konfigurasi terlebih dahulu identitynya.
 Pada winbox mikrotik, buka System → identity. Set Identity sesuai yang kamu inginkan. Di sini saya set "Router" untuk mikrotik yang dijadikan router dan "AP" untuk mikrotik yang dijadikan Access Point.
 
