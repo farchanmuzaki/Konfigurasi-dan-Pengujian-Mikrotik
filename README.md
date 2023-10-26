@@ -5,16 +5,7 @@ Ini adalah page untuk belajar konfigurasi dasar dan pengujian
 
 Pada Router kita diminta mengkonfigurasi NTP, Web Proxy, Hotspot dengan RADIUS, DHCP Server, dan firewall. Untuk server RADIUS, kita akan menggunakan userman yang terinstal pada Router. Sedangkan untuk mengkonfigurasi mikrotik kita akan mengguanakan software winbox yang bisa didownload melalui Website MikroTik.
 
-Oke, untuk mempermudah kita soal paket 4 ini menjadi beberapa task.
 
-Konfigurasi IP Address, NTP dan NAT Masquerade pada Router
-Konfigurasi Web Proxy
-Konfigurasi DHCP Server untuk LAN dan WLAN
-Konfigurasi Hotspot pada Router (ether3)
-Konfigurasi RADIUS Userman pada Router
-Opsi 1: Konfigurasi Access Point Mikrotik RouterOS
-Opsi 2: Konfigurasi Access Point TPLink
-Konfigurasi Firewall
 Seperti biasa, pastikan mikrotik telah direset ke no default konfiguration. Selain itu agar kita tidak bingung mana mikrotik yang dijadikan router, mana yang dijadikan accesspoint (jika menggunakan mikrotik). Maka, kita konfigurasi terlebih dahulu identitynya.
 Pada winbox mikrotik, buka System → identity. Set Identity sesuai yang kamu inginkan. Di sini saya set "Router" untuk mikrotik yang dijadikan router dan "AP" untuk mikrotik yang dijadikan Access Point.
 
@@ -423,6 +414,12 @@ Sekarang kalau kita akses situs linux.org mendowload file mp3 dan mkv, maka tida
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/23cb3524-b5ae-42ac-b55e-56c550f8973a)
 
+Contoh berikut ini adalah konfigurasi proxy di windows 10. Pada kolom Address isi alamat router. Sedangkan Port isi dengan port proxy yang kita gunakan tadi, yaitu 8080. Kemudian save.
+
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/d84a1ee0-6adc-48b3-810a-195357e36dbb)
+
+Nah sekarang kita bisa mengakses linux.org, serta mendownload file .mp3 dan .mkv.
+
 Pengujian Web Proxy
 
 Nah proxy bisa kita uji dengan cara mengkonfigurasikannya pada komputer client. Jika client menggunakan proxy maka dia akan terbebas dari firewall yang memblokir linux.org dan file mp3 mkv.
@@ -431,8 +428,30 @@ Cara konfigurasi proxy, buka google chrome. KLik icon titik 3 di pojok kanan ata
 
 ![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/06c7a117-78fe-4f8d-a825-bf21b1660bbe)
 
-Contoh berikut ini adalah konfigurasi proxy di windows 10. Pada kolom Address isi alamat router. Sedangkan Port isi dengan port proxy yang kita gunakan tadi, yaitu 8080. Kemudian save.
+Management Bandwidth
+Terakhir kita diminata memanage bandwidth untuk traffic dari jaringan LAN, bandwidthnya adalah 256Kbps. Sedangkan untuk jaringan WLAN hanya 128Kbps. Kita gunakan saja Simple Queue mikrotik,
 
-![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/d84a1ee0-6adc-48b3-810a-195357e36dbb)
+Buka menu Queues, pilih tab Simple Queues tambah rule baru, namenya bebas. Targetnya kita isi dengan alamat network jaringan LAN (10.10.0.128/26) atau dengan interface yang mengarah ke jaringan LAN yaitu ether3.
+Kemudian Max limit, isi dengan 256K di bagian upload dan download.
 
-Nah sekarang kita bisa mengakses linux.org, serta mendownload file .mp3 dan .mkv.
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/0c2ef2c8-7432-455f-98ea-867e54a05447)
+
+Hal yang sama kita lakukan untuk jaringan WLAN, hanya saja tagetnya perlu disesuaikan dengan interface yang mengarah ke jaringan WLAN yaitu ether4. Atau dengan alamat network wlan (10.10.0.0/25).
+Jika ada queue dinamis yang sudah jalan untuk ether4, bisa dihapus saja agar queue yang kita buat ini berfungsi.
+Dan max limitnya diisi 128K.
+
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/6caa4132-3390-4ee9-8fae-18ce60004540)
+
+Nah sekarang sudah ada 2 queues yang mengatur bandidth dari ether3 dan ether4.
+
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/dbd1bb9e-ea35-40ca-9b3e-0144cb77bac5)
+
+Untuk pengujiannya lakukan browsing, download file, atau speedtest di sisi client LAN (kabel). Kemudian pada rule simple queues untuk ether3, kita double-click. Dan pilih tab Traffic, perhatikan Upload/Download-nya harusnya maksmimal berada di angka sekitar 256K.
+
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/eac554fd-d9d6-4523-92e2-ed8e6733e242)
+
+Lakukan hal serupa untuk pengujian di client wireless. Pastikan yang kamu amati saat pengujian client wireless adalah rule limit-128k (ether4). Harusnya maksimal upload/downloadnya ada di angka sekitar 128Kbps. Kadang lebih karena ada yang namanya brust threshold.
+
+![image](https://github.com/farchanmuzaki/Konfigurasi-dan-Pengujian-Mikrotik/assets/116914974/56c521d7-50e5-4fcf-baa7-53f5e3df6303)
+
+
